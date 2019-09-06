@@ -25,3 +25,5 @@ Each of us are interested in the fields of augmented reality and virtual reality
 
 ## Our Approach ##
 Implement a real-time subtitle system in Augmented Reality. As phrases are detected by our AR interface, it is then translated to the user-selected language. For those who are entirely deaf, this will allow them to understand conversations. For those who are speaking to someone else who speaks a foreign language, they will be better able to comprehend and convey ideas while maintaining the human element of conversation, being able to view body language and actually see their partner speak.
+
+As far as a demo, we would ideally be able to show this project in action. Using some kind of AR device (a headset or phone, preferably), we can allow a user to wear/operate the device and see subtitles in relatively real-time. Our ultimate goal is to get this thing in a working state, maybe even marketing it eventually.
