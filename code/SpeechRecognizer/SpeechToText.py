@@ -1,25 +1,26 @@
 import speech_recognition as sr
 
+def ListenToVoice():
+    mic = sr.Recognizer()
+    with sr.Microphone() as source:
 
-class SpeechToText:
-    def __init__(self):
-        self.mic = sr.Recognizer()
-    def listen(self):
-        with sr.Microphone() as source:
-            self.mic.adjust_for_ambient_noise(source)
+        mic.adjust_for_ambient_noise(source)
 
-            print("Please say something")
+        print("Please say something")
 
-            audio = self.mic.listen(source)
+        audio = mic.listen(source)
 
-            print("Recognizing Now .... ")
+        print("Recognizing Now .... ")
 
-            try:
-                print("You have said \n" + self.mic.recognize_google(audio))
-                print("Audio Recorded Successfully \n ")
-            except Exception as e:
-                print("Error :  " + str(e))
+        try:
+            phrase = mic.recognize_google(audio)
+            if(phrase.lower() is "listen here new speaker"):
+                with open("microphone-results.wav", "wb") as f:
+                    f.write(audio.get_wav_data())
+            print("You have said \n" + phrase)
+            print("Audio Recorded Successfully \n ")
+        except Exception as e:
+            print("Error :  " + str(e))
 
-if __name__ == "__main__":
-    mic = SpeechToText()
-    mic.listen()
+listen = ListenToVoice
+listen()
