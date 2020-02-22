@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
        setContentView(R.layout.activity_main);
 
        CustomSpeechBubble customArFragment = (CustomSpeechBubble) getSupportFragmentManager().findFragmentById(R.id.arFragment);
-
+       SpeechFrame speechFrame = new SpeechFrame();
+       speechFrame.setTimer(0);
        ModelRenderable.builder().setSource(this, R.raw.fox_face)
                .build()
                .thenAccept(renderable -> {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                .thenAccept(texture -> this.texture = texture);
        customArFragment.getArSceneView().setCameraStreamRenderPriority(Renderable.RENDER_PRIORITY_FIRST);
        customArFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
+           speechFrame.setTimer(frameTime.getDeltaSeconds());
            if( modelRenderable == null || texture == null)
                return;
            Frame frame = customArFragment.getArSceneView().getArFrame();
@@ -65,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
                augmentedFaceNode.setFaceMeshTexture(texture);
 
                isAdded = true;
+               if (speechFrame.getTimer() >  100000){
+
+               }
            }
+
        });
 
 
