@@ -16,6 +16,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.Texture;
+import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.AugmentedFaceNode;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -26,9 +27,8 @@ import static com.google.ar.sceneform.rendering.ShapeFactory.makeSphere;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ModelRenderable modelRenderable;
-    private Texture texture;
     private boolean isAdded = false;
+    private ViewRenderable testViewRenderable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +38,20 @@ public class MainActivity extends AppCompatActivity {
        CustomSpeechBubble customArFragment = (CustomSpeechBubble) getSupportFragmentManager().findFragmentById(R.id.arFragment);
        SpeechFrame speechFrame = new SpeechFrame();
        speechFrame.setTimer(0);
-       ModelRenderable.builder().setSource(this, R.raw.fox_face)
-               .build()
-               .thenAccept(renderable -> {
-                   modelRenderable = renderable;
-                   modelRenderable.setShadowCaster(false);
-                   modelRenderable.setShadowReceiver(false);
-               });
-       Texture.builder().setSource(this,R.drawable.fox_face_mesh_texture)
-               .build()
-               .thenAccept(texture -> this.texture = texture);
+
        customArFragment.getArSceneView().setCameraStreamRenderPriority(Renderable.RENDER_PRIORITY_FIRST);
        customArFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
            speechFrame.setTimer(frameTime.getDeltaSeconds());
-           if( modelRenderable == null || texture == null)
-               return;
+
            Frame frame = customArFragment.getArSceneView().getArFrame();
 
            Collection<AugmentedFace> augmentedFaces = frame.getUpdatedTrackables(AugmentedFace.class);
+
+
+           ViewRenderable.builder()
+                   .setView(this, R.layout.testrenderable)
+                   .build()
+                   .thenAccept(renderable -> testViewRenderable = renderable);
 
            for (AugmentedFace augmentedFace : augmentedFaces) {
                if(isAdded){
@@ -63,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
                }
                AugmentedFaceNode augmentedFaceNode = new AugmentedFaceNode(augmentedFace);
                augmentedFaceNode.setParent(customArFragment.getArSceneView().getScene());
-               augmentedFaceNode.setFaceRegionsRenderable(modelRenderable);
-               augmentedFaceNode.setFaceMeshTexture(texture);
+               Collection<Anchor> a = augmentedFace.getAnchors();
+
+               augmentedFaceNode.setRenderable(testViewRenderable);
 
                isAdded = true;
                if (speechFrame.getTimer() >  100000){
