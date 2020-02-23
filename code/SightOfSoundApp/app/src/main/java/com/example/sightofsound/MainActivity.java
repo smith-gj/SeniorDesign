@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.AugmentedFace;
@@ -16,9 +18,12 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.Texture;
+import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.AugmentedFaceNode;
 import com.google.ar.sceneform.ux.TransformableNode;
+
+import org.w3c.dom.Text;
 
 import java.util.Collection;
 
@@ -26,54 +31,53 @@ import static com.google.ar.sceneform.rendering.ShapeFactory.makeSphere;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ModelRenderable modelRenderable;
-    private Texture texture;
     private boolean isAdded = false;
+    private ViewRenderable testViewRenderable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-       CustomSpeechBubble customArFragment = (CustomSpeechBubble) getSupportFragmentManager().findFragmentById(R.id.arFragment);
-       SpeechFrame speechFrame = new SpeechFrame();
-       speechFrame.setTimer(0);
-       ModelRenderable.builder().setSource(this, R.raw.fox_face)
-               .build()
-               .thenAccept(renderable -> {
-                   modelRenderable = renderable;
-                   modelRenderable.setShadowCaster(false);
-                   modelRenderable.setShadowReceiver(false);
-               });
-       Texture.builder().setSource(this,R.drawable.fox_face_mesh_texture)
-               .build()
-               .thenAccept(texture -> this.texture = texture);
-       customArFragment.getArSceneView().setCameraStreamRenderPriority(Renderable.RENDER_PRIORITY_FIRST);
-       customArFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
-           speechFrame.setTimer(frameTime.getDeltaSeconds());
-           if( modelRenderable == null || texture == null)
-               return;
-           Frame frame = customArFragment.getArSceneView().getArFrame();
+        CustomSpeechBubble customArFragment = (CustomSpeechBubble) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+        SpeechFrame speechFrame = new SpeechFrame();
+        speechFrame.setTimer(0);
 
-           Collection<AugmentedFace> augmentedFaces = frame.getUpdatedTrackables(AugmentedFace.class);
+        customArFragment.getArSceneView().setCameraStreamRenderPriority(Renderable.RENDER_PRIORITY_FIRST);
+        customArFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
 
-           for (AugmentedFace augmentedFace : augmentedFaces) {
-               if(isAdded){
-                   return;
-               }
-               AugmentedFaceNode augmentedFaceNode = new AugmentedFaceNode(augmentedFace);
-               augmentedFaceNode.setParent(customArFragment.getArSceneView().getScene());
-               augmentedFaceNode.setFaceRegionsRenderable(modelRenderable);
-               augmentedFaceNode.setFaceMeshTexture(texture);
+            speechFrame.setTimer(frameTime.getDeltaSeconds());
 
-               isAdded = true;
-               if (speechFrame.getTimer() >  100000){
+            Frame frame = customArFragment.getArSceneView().getArFrame();
 
-               }
-           }
+            Collection<AugmentedFace> augmentedFaces = frame.getUpdatedTrackables(AugmentedFace.class);
 
-       });
 
+            ViewRenderable.builder()
+                    .setView(this, R.layout.test)
+                    .build()
+                    .thenAccept(renderable -> testViewRenderable = renderable);
+            TextView button = null;
+            button = testViewRenderable.getView().findViewById(R.id.SubtitleWidget);
+            button.setText(String.valueOf(frameTime.getDeltaSeconds()));
+
+            for (AugmentedFace augmentedFace : augmentedFaces) {
+                if(isAdded){
+                    return;
+                }
+                AugmentedFaceNode augmentedFaceNode = new AugmentedFaceNode(augmentedFace);
+                augmentedFaceNode.setParent(customArFragment.getArSceneView().getScene());
+
+
+                augmentedFaceNode.setRenderable(testViewRenderable);
+
+                isAdded = true;
+                if (speechFrame.getTimer() >  100000){
+
+                }
+            }
+
+        });
 
     }
 

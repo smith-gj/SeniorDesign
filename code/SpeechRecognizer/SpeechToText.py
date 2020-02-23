@@ -14,9 +14,10 @@ def ListenToVoice():
 
         try:
             phrase = mic.recognize_google(audio)
-            if(phrase.lower() is "listen here new speaker"):
+            if(phrase.lower() is "poggers"):
                 with open("microphone-results.wav", "wb") as f:
                     f.write(audio.get_wav_data())
+                    print(audio.get_wav_data())
             print("You have said \n" + phrase)
             print("Audio Recorded Successfully \n ")
         except Exception as e:
