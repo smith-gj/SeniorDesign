@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.AugmentedFace;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
        customArFragment.getArSceneView().setCameraStreamRenderPriority(Renderable.RENDER_PRIORITY_FIRST);
        customArFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
-           speechFrame.setTimer(frameTime.getDeltaSeconds());
+           //speechFrame.setTimer(frameTime.getDeltaSeconds());
 
            Frame frame = customArFragment.getArSceneView().getArFrame();
 
@@ -53,17 +56,36 @@ public class MainActivity extends AppCompatActivity {
                    .build()
                    .thenAccept(renderable -> testViewRenderable = renderable);
 
+           TextView subtitleView = null;
+
+           String character = "a";
+           String testSubtitle= character;
+
+           int oldTimer = speechFrame.getTimerInt();
+
            for (AugmentedFace augmentedFace : augmentedFaces) {
-               if(isAdded){
-                   return;
+               if(!isAdded){
+
+                   AugmentedFaceNode augmentedFaceNode = new AugmentedFaceNode(augmentedFace);
+                   augmentedFaceNode.setParent(customArFragment.getArSceneView().getScene());
+
+                   augmentedFaceNode.setRenderable(testViewRenderable);
+                   testViewRenderable.setHorizontalAlignment(ViewRenderable.HorizontalAlignment.LEFT);
+
+
+                   isAdded = true;
                }
-               AugmentedFaceNode augmentedFaceNode = new AugmentedFaceNode(augmentedFace);
-               augmentedFaceNode.setParent(customArFragment.getArSceneView().getScene());
-               Collection<Anchor> a = augmentedFace.getAnchors();
+               subtitleView = testViewRenderable.getView().findViewById(R.id.SubtitleWidget);
+               speechFrame.addFrame(frameTime.getDeltaSeconds());
 
-               augmentedFaceNode.setRenderable(testViewRenderable);
+               if(speechFrame.getTimerInt() != oldTimer){
+                   //do something once a second
+                   oldTimer = speechFrame.getTimerInt();
 
-               isAdded = true;
+                   testSubtitle += character;
+               }
+               subtitleView.setText(testSubtitle);
+
                if (speechFrame.getTimer() >  100000){
 
                }

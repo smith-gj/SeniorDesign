@@ -7,6 +7,8 @@ public class SpeechFrame {
         return timer;
     }
 
+    public int getTimerInt() {return (int) timer;}
+
     public void setTimer(float timer) {
         this.timer = timer;
     }
