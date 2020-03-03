@@ -1,0 +1,5 @@
+rootProject.name='testApp'
+include ':app'
+include ':opencv'
+include ':java'
+include ':openCVLibrary349'
