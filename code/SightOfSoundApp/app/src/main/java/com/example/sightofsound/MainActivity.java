@@ -36,12 +36,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         javaCameraView = (JavaCameraView)findViewById(R.id.javaCamera);
-
-        if(!OpenCVLoader.initDebug())
+        javaCameraView.setCvCameraViewListener(this);
+        /*if(!OpenCVLoader.initDebug())
         {
-
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11,this,baseCallback);
         }
         else
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         javaCameraView.setCvCameraViewListener(this);
 
@@ -61,8 +59,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat();
         mGrey = new Mat();
-
-
     }
 
     @Override
@@ -89,6 +85,29 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     new Scalar(255,0,0));
         }
         return mRgba;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!OpenCVLoader.initDebug()){
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11,this,baseCallback);
+        }
+        else
+        {
+            try {
+                baseCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        javaCameraView.disableView();
     }
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
