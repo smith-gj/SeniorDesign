@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCamera2View;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
@@ -28,7 +29,8 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    JavaCameraView javaCameraView;
+
+    JavaCamera2View javaCamera2View;
     File casFile;
     private Mat mRgba,mGrey;
     CascadeClassifier  faceDetected;
@@ -36,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        javaCameraView = (JavaCameraView)findViewById(R.id.javaCamera);
-        javaCameraView.setCvCameraViewListener(this);
+        javaCamera2View = (JavaCamera2View)findViewById(R.id.javaCamera);
+        javaCamera2View.setCvCameraViewListener(this);
     }
 
     @Override
@@ -58,19 +60,25 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mRgba = inputFrame.rgba();
         mGrey = inputFrame.gray();
 
+        Mat mRgbaT = mRgba.t();
+        Core.flip(mRgba.t(), mRgbaT, 1);
+        Imgproc.resize(mRgbaT, mRgbaT, mRgba.size());
         //detect face
 
         MatOfRect faceDetections = new MatOfRect();
 
-        faceDetected.detectMultiScale(mRgba,faceDetections);
+        faceDetected.detectMultiScale(mRgbaT,faceDetections);
+
 
         for(Rect rect: faceDetections.toArray())
         {
+            //face detected yee haw lets capture it
+            //Imgproc.rectangle(mRgbaT,new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+                    //new Scalar(255,0,0));
+            Imgproc.putText(mRgbaT,"hello",new Point(rect.x,rect.y),0,1,new Scalar(0,255,0));
 
-            Imgproc.rectangle(mRgba,new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
-                    new Scalar(255,0,0));
         }
-        return mRgba;
+        return mRgbaT;
     }
 
     @Override
@@ -93,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        javaCameraView.disableView();
+        javaCamera2View.disableView();
     }
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
@@ -128,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                         cascade.delete();
                     }
 
-                    javaCameraView.enableView();
+                    javaCamera2View.enableView();
 
                 }
                 break;
