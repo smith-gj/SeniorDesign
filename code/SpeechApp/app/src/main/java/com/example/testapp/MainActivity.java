@@ -26,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     File casFile;
     private Mat mRgba,mGrey;
     CascadeClassifier  faceDetected;
+    List<Rect> faces = new ArrayList<Rect>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +71,13 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         MatOfRect faceDetections = new MatOfRect();
 
         faceDetected.detectMultiScale(mRgbaT,faceDetections);
-
-
-        for(Rect rect: faceDetections.toArray())
+        faces = faceDetections.toList();
+        if(!faces.isEmpty())
         {
-            //face detected yee haw lets capture it
-            //Imgproc.rectangle(mRgbaT,new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
-                    //new Scalar(255,0,0));
-            Imgproc.putText(mRgbaT,"hello",new Point(rect.x,rect.y),0,1,new Scalar(0,255,0));
+            Rect rect = faces.get(0);
+            //delete this and draw speech bubble here
+            Imgproc.rectangle(mRgbaT,new Point(rect.x,rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+            new Scalar(255,0,0));
 
         }
         return mRgbaT;
@@ -102,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     protected void onDestroy() {
         super.onDestroy();
         javaCamera2View.disableView();
+    }
+
+    private void Draw(Rect rect, Mat mga)
+    {
+
     }
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
