@@ -1,11 +1,13 @@
 package org.opencv.android;
 
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -82,6 +84,18 @@ public class JavaCamera2View extends CameraBridgeViewBase {
             mBackgroundHandler = null;
         } catch (InterruptedException e) {
             Log.e(LOGTAG, "stopBackgroundThread", e);
+        }
+    }
+    private void setDisplayOrientation(Camera mCamera, int angle) {
+        Method downPolymorphic;
+        try
+        {
+            downPolymorphic = mCamera.getClass().getMethod("setDisplayOrientation", new Class[] { int.class });
+            if (downPolymorphic != null)
+                downPolymorphic.invoke(mCamera, new Object[] { angle });
+        }
+        catch (Exception e1)
+        {
         }
     }
 
