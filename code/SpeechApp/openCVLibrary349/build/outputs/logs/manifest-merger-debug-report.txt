@@ -1,12 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-7:12
+ADDED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:2:1-6:12
 	package
 		ADDED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml:3:7-27
 		INJECTED from E:\Project\SeniorDesign\code\SpeechApp\openCVLibrary349\src\main\AndroidManifest.xml
