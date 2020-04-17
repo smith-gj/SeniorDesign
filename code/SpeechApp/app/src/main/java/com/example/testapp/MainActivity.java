@@ -33,6 +33,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
+//import com.chaquo.python.Python;
+//import com.chaquo.python.PyObject;
+//import com.chaquo.python.android.AndroidPlatform;
+
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     JavaCamera2View javaCamera2View;
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private static final int SPEECH_REQUEST_CODE = 1000;
     SpeechThread speechThread = new SpeechThread();
     private boolean isRunning;
+    //PyObject stt = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         javaCamera2View.setCvCameraViewListener(this);
         //startService(new Intent(this, SpeechService.class));
         //speechThread.run();
+
+        /*if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
+        Python py = Python.getInstance();
+        stt = py.getModule("SpeechToText");*/
     }
 
     public String getText()
@@ -132,16 +143,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     private void speak()
     {
-        Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
-        try{
-            startActivityForResult(speechIntent,SPEECH_REQUEST_CODE);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        //PyObject speech = stt.callAttr("ListenToVoice");
+        //setText(speech.toString());
+        isRunning = false;
     }
 
     @Override

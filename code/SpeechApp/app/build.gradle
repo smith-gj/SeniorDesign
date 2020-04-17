@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.chaquo.python'
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -12,6 +12,18 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+        python {
+            buildPython "C:/Users/Eric/AppData/Local/Programs/Python/Python38/python.exe"
+            buildPython "py -3.8"
+            pip{
+                install "SpeechRecognition"
+                install "PyAudio-0.2.11-cp38-cp38-win32_amd64.whl"
+
+            }
+        }
     }
 
     buildTypes {
@@ -24,6 +36,9 @@ android {
         main {
             jni {
                 srcDirs 'src/main/jni', 'src/main/jniLibs/'
+            }
+            python {
+                srcDirs = ["src/main/python"]
             }
         }
     }
