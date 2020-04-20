@@ -17,10 +17,7 @@ def ListenToVoice():
             if(phrase.lower() is "listen here new speaker"):
                 with open("microphone-results.wav", "wb") as f:
                     f.write(audio.get_wav_data())
-            print("You have said \n" + phrase)
-            print("Audio Recorded Successfully \n ")
+            return (phrase)
         except Exception as e:
-            print("Error :  " + str(e))
+            return("Error :  " + str(e))
 
-listen = ListenToVoice
-listen()
