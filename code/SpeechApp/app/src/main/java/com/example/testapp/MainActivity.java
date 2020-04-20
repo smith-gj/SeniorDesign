@@ -14,7 +14,6 @@ import android.speech.RecognizerIntent;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCamera2View;
-import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private Mat mRgba,mGrey;
     private Handler mainHandler = new Handler();
     private volatile boolean stopThread = false;
-    private volatile String text1 = "hello";
+    private volatile String text1 = "";
     CascadeClassifier  faceDetected;
     private static final int SPEECH_REQUEST_CODE = 1000;
     SpeechThread speechThread = new SpeechThread();
@@ -284,23 +283,20 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     private void speak1()
     {
-        for(int i = 0; i < 10; i++){
-            if(i % 2 == 0){
-                System.out.println("change text to test");
-                setText("test1");
-            }
-            else{
-                System.out.println("change text to hello");
-                setText("Kekw");
-            }
-            try{
-                Thread.sleep(10000);
+        try{
+            Thread.sleep(10000);
+            setText("hi how are you doing today");
+            Thread.sleep(5000);
+            setText("same I am also doing well");
+            Thread.sleep(5000);
+            setText("have a nice day");
+            Thread.sleep(5000);
+            setText("");
+            //isRunning = false;
 
-            } catch (InterruptedException e){
-                e.printStackTrace();
-            }
+        } catch (InterruptedException e){
+            e.printStackTrace();
         }
-        isRunning = false;
     }
 
 
