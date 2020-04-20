@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 
+import com.chaquo.python.Python;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCamera2View;
@@ -33,9 +35,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
-//import com.chaquo.python.Python;
-//import com.chaquo.python.PyObject;
-//import com.chaquo.python.android.AndroidPlatform;
+import com.chaquo.python.Python;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -49,21 +51,21 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private static final int SPEECH_REQUEST_CODE = 1000;
     SpeechThread speechThread = new SpeechThread();
     private boolean isRunning;
-    //PyObject stt = null;
+    PyObject stt = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         javaCamera2View = (JavaCamera2View)findViewById(R.id.javaCamera);
         javaCamera2View.setCvCameraViewListener(this);
-        //startService(new Intent(this, SpeechService.class));
         //speechThread.run();
 
-        /*if (! Python.isStarted()) {
+        if (! Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
         }
         Python py = Python.getInstance();
-        stt = py.getModule("SpeechToText");*/
+        stt = py.getModule("SpeechToText");
+        startService(new Intent(this, SpeechService.class));
     }
 
     public String getText()
@@ -143,8 +145,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     private void speak()
     {
-        //PyObject speech = stt.callAttr("ListenToVoice");
-        //setText(speech.toString());
+        PyObject speech = stt.callAttr("ListenToVoice");
+        setText(speech.toString());
         isRunning = false;
     }
 
@@ -162,28 +164,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
         }
     }
-
-    private void speak1()
-    {
-        for(int i = 0; i < 10; i++){
-            if(i % 2 == 0){
-                System.out.println("change text to test");
-                setText("test1");
-            }
-            else{
-                System.out.println("change text to hello");
-                setText("Kekw");
-            }
-            try{
-                Thread.sleep(10000);
-
-            } catch (InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-        isRunning = false;
-    }
-
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
         @Override
@@ -255,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         @Override
         public void run() {
             isRunning = true;
-            speak1();
+            speak();
         }
     }
 }
